@@ -47,13 +47,16 @@ public class Airports {
 		
 	}
 		
-	private String[] findAirportIATA() {
+	private String[] findAirportIATA(String city, String country) {
 		
 		BufferedReader bAirportRead = null;
+		ArrayList<String> iatas = new ArrayList<String>();
 		
 		try {
 			
-			bAirportRead = new BufferedReader(new FileReader("airport.csv"));
+			bAirportRead = new BufferedReader(new FileReader("airports.csv"));
+			
+			iatas = bAirportRead
 			
 			
 		} catch(FileNotFoundException fnfe) {
@@ -73,8 +76,8 @@ public class Airports {
 				ioe.printStackTrace();
 			}
 		
+		}
+	
 	}
-	
-	
 
 }
