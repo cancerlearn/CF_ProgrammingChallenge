@@ -52,15 +52,14 @@ public class Routes {
 				
 				//Field storing the source airport code
 				String sourceAirportCode = routeLine.split(",")[2];
-<<<<<<< HEAD
-				//Calculating distance between airports
-				double distance = findDistance(new Airports(sourceAirportCode), new Airports(routeLine.split(",")[4]));
-=======
 				
 				//Calculating distance between airports
 				double distance = findDistance(new Airports(sourceAirportCode), new Airports(routeLine.split(",")[4]));
 				
->>>>>>> 8d7554ada30ca490241a394151bd97857b9f4d8e
+				//Calculating distance between airports
+				double distance = findDistance(new Airports(sourceAirportCode), new Airports(routeLine.split(",")[4]));
+				
+
 				//Field storing the destination airport code
 				String destinationAirportCode = routeLine.split(",")[4] + " | " + routeLine.split(",")[7] + " | " + routeLine.split(",")[1] + " | " + Double.toString(distance);
 				
@@ -97,20 +96,14 @@ public class Routes {
 		
 	}
 	
-<<<<<<< HEAD
 
-=======
->>>>>>> 8d7554ada30ca490241a394151bd97857b9f4d8e
 	private double findDistance(Airports a1, Airports a2) {
 		
 		
 		
 	}
 	
-<<<<<<< HEAD
 
-=======
->>>>>>> 8d7554ada30ca490241a394151bd97857b9f4d8e
 	public static void main(String[]args) {
 		Routes r1 = new Routes("SVX");
 		System.out.println(r1.routes.toString());

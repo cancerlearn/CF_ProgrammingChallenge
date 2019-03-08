@@ -9,10 +9,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-<<<<<<< HEAD
-=======
 import java.util.ArrayList;
->>>>>>> 8d7554ada30ca490241a394151bd97857b9f4d8e
 import java.io.FileNotFoundException;
 
 /**
@@ -95,11 +92,7 @@ public class FlightFinder {
 		}
 		
 	}
-<<<<<<< HEAD
-	
 
-=======
->>>>>>> 8d7554ada30ca490241a394151bd97857b9f4d8e
 
 	/**
 	 * @param args
@@ -109,15 +102,6 @@ public class FlightFinder {
 
 		//Store starting point and destination
 		String[] inputTxt = getInputTxt();
-<<<<<<< HEAD
-		
-		Airports a1 = new Airports();
-		Airports a2 = new Airports();
-		
-		Routes r1 = new Routes();
-		
-		writeOutputTxt(r1.getAllRoutes());
-=======
 
 		String city = inputTxt[0].split(",")[0].replaceAll("\\s+", "");
 		String country = inputTxt[0].split(",")[1].replaceAll("\\s+", "");
@@ -132,7 +116,6 @@ public class FlightFinder {
 		//Routes r1 = new Routes();
 		
 		//writeOutputTxt(r1.getAllRoutes());
->>>>>>> 8d7554ada30ca490241a394151bd97857b9f4d8e
 	}
 
 }
