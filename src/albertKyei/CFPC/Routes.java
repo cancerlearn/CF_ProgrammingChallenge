@@ -132,7 +132,11 @@ public class Routes {
 		
 		try {
 			
-			this.routes;
+			//First step: check whether the final destination is among the list of all destinations
+			//Second step: calculate distance and return output if it is. else go to step three
+			//Third step: find all source destinations which lead to final destination
+			//Fourth step: find any matches among the main source's list of destinations and the final destination's list of possible source
+			//Fifth step: carry this out recursively until a match is found
 			
 		} catch(FileNotFoundException fnfe) {
 			
