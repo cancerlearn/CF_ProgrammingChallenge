@@ -96,10 +96,31 @@ public class Routes {
 		
 	}
 	
-
+	/**
+	 * This function uses the harvesine function to calculate the distance between two airports.
+	 * @param a1
+	 * @param a2
+	 * @return the distance
+	 */
 	private double findDistance(Airports a1, Airports a2) {
 		
+		//Instance variables for harvesine formula, where r is the earths radius in km
+		int r = 6731;
+		double lat1 = a1.getLatitude();
+		double lat2 = a2.getLatitude();
+		double lon1 = a1.getLongitude();
+		double lon2 = a2.getLongitude();
 		
+		double latdif = Math.toRadians(lat2 - lat1);
+		double londif = Math.toRadians(lon2 - lon1);
+		
+		//Harvesine calculation
+		double a = Math.sin(latdif/2) * Math.sin(latdif/2) + Math.cos(lat1) * Math.cos(lat2) *
+		        Math.sin(londif/2) * Math.sin(londif/2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		double d = r * c;
+		
+		return d;
 		
 	}
 	

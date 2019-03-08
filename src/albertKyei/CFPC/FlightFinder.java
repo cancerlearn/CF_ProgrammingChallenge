@@ -9,7 +9,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.util.ArrayList;
+
 import java.io.FileNotFoundException;
 
 /**
@@ -93,6 +95,9 @@ public class FlightFinder {
 		
 	}
 
+	
+
+
 
 	/**
 	 * @param args
@@ -102,6 +107,7 @@ public class FlightFinder {
 
 		//Store starting point and destination
 		String[] inputTxt = getInputTxt();
+
 
 		String city = inputTxt[0].split(",")[0].replaceAll("\\s+", "");
 		String country = inputTxt[0].split(",")[1].replaceAll("\\s+", "");
@@ -116,6 +122,7 @@ public class FlightFinder {
 		//Routes r1 = new Routes();
 		
 		//writeOutputTxt(r1.getAllRoutes());
+
 	}
 
 }
