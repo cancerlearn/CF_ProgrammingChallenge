@@ -48,8 +48,15 @@ public class Airports {
 		
 		
 	}
-		
-	private String[] findAirportIATA(String city, String country) {
+	
+	/**
+	 * This method returns an a list of all airport's IATAs in a given city and country
+	 * 
+	 * @param city
+	 * @param country
+	 * @return ArrayList of airport IATAs
+	 */
+	protected static ArrayList<String> findAirportIATA(String city, String country) {
 		
 		BufferedReader bAirportRead = null;
 		ArrayList<String> iatas = new ArrayList<String>();
@@ -58,6 +65,20 @@ public class Airports {
 			
 			bAirportRead = new BufferedReader(new FileReader("airports.csv"));
 			
+			String airports = "";
+			//Iterating through the lines until the last
+			while((airports = bAirportRead.readLine()) != null) {
+				
+				//These fields store the city and country of the airport
+				String airportCity = airports.split(",")[2];
+				String airportCountry = airports.split(",")[3];
+				
+				if (city.equals(airportCity) && country.equals(airportCountry)){
+					
+					iatas.add(airports.split(",")[4]);
+					
+				}
+			}
 			
 			
 		} catch(FileNotFoundException fnfe) {
@@ -78,6 +99,8 @@ public class Airports {
 			}
 		
 		}
+		
+		return iatas;
 	
 	}
 
