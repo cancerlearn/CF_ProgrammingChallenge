@@ -106,13 +106,13 @@ public class Routes {
 		
 		//Instance variables for harvesine formula, where r is the earths radius in km
 		int r = 6731;
-		double lat1 = a1.getLatitude();
-		double lat2 = a2.getLatitude();
-		double lon1 = a1.getLongitude();
-		double lon2 = a2.getLongitude();
+		double lat1 = Math.toRadians(a1.getLatitude());
+		double lat2 = Math.toRadians(a2.getLatitude());
+		double lon1 = Math.toRadians(a1.getLongitude());
+		double lon2 = Math.toRadians(a2.getLongitude());
 		
-		double latdif = Math.toRadians(lat2 - lat1);
-		double londif = Math.toRadians(lon2 - lon1);
+		double latdif = lat2 - lat1;
+		double londif = lon2 - lon1;
 		
 		//Harvesine calculation
 		double a = Math.sin(latdif/2) * Math.sin(latdif/2) + Math.cos(lat1) * Math.cos(lat2) *
