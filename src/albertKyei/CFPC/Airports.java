@@ -56,7 +56,6 @@ public class Airports {
 			
 			bAirportRead = new BufferedReader(new FileReader("airports.csv"));
 			
-			iatas = bAirportRead
 			
 			
 		} catch(FileNotFoundException fnfe) {
