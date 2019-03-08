@@ -43,6 +43,8 @@ public class Airports {
 	 */
 	public Airports(String IATA) {
 		
+		this.IATA = IATA;
+		
 		
 		
 	}
