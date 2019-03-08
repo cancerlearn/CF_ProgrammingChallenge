@@ -90,10 +90,31 @@ public class Routes {
 		
 	}
 	
+
 	private double findDistance(Airports a1, Airports a2) {
 		
 		
 		
+	}
+	
+	public String getAllRoutes(String start, String end) {
+		String output = "";
+		int flights = 0;
+		
+		BufferedReader br = null;
+		
+		try {
+			
+			this.routes;
+			
+		} catch(FileNotFoundException fnfe) {
+			
+			fnfe.printStackTrace();
+			System.out.println("File does not exist.");
+			
+		}
+		
+		return output;
 	}
 	
 	public static void main(String[]args) {
