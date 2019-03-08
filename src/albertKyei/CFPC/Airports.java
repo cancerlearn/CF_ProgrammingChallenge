@@ -37,19 +37,6 @@ public class Airports {
 	
 	/**
 	 * Default constructor for this class.
-	 * Using the city and country parameters, the right airport(s) is(are) found and the airport object(s) is(are) created.
-	 * 
-	 * @param city
-	 * @param country
-	 */
-	public Airports(String city, String country) {
-		
-		
-		
-	}
-	
-	/**
-	 * Secondary constructor.
 	 * This constructor takes the IATA code as an argument to find and create the corresponding airport object.
 	 * 
 	 * @param IATA
@@ -59,8 +46,32 @@ public class Airports {
 		
 		
 	}
-	
-	private String findAirportIATA() {
+		
+	private String[] findAirportIATA() {
+		
+		BufferedReader bAirportRead = null;
+		
+		try {
+			
+			bAirportRead = new BufferedReader(new FileReader("airport.csv"));
+			
+			
+		} catch(FileNotFoundException fnfe) {
+			
+			fnfe.printStackTrace();
+			System.out.println("File does not exist.");
+			
+		} catch(IOException ioe) {
+			
+			ioe.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if(bAirportRead != null) bAirportRead.close();
+			} catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
 		
 	}
 	
