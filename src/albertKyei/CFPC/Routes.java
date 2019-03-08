@@ -52,8 +52,10 @@ public class Routes {
 				
 				//Field storing the source airport code
 				String sourceAirportCode = routeLine.split(",")[2];
+				
 				//Calculating distance between airports
 				double distance = findDistance(new Airports(sourceAirportCode), new Airports(routeLine.split(",")[4]));
+				
 				//Field storing the destination airport code
 				String destinationAirportCode = routeLine.split(",")[4] + " | " + routeLine.split(",")[7] + " | " + routeLine.split(",")[1] + " | " + Double.toString(distance);
 				

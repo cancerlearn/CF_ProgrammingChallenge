@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.io.FileNotFoundException;
 
 /**
@@ -100,13 +101,20 @@ public class FlightFinder {
 
 		//Store starting point and destination
 		String[] inputTxt = getInputTxt();
+
+		String city = inputTxt[0].split(",")[0].replaceAll("\\s+", "");
+		String country = inputTxt[0].split(",")[1].replaceAll("\\s+", "");
 		
-		Airports a1 = new Airports();
-		Airports a2 = new Airports();
+		//Find the airports in given city and country
+		ArrayList<String> allAirportIATAs = Airports.findAirportIATA("\""+city+"\"","\""+country+"\"");
+		System.out.println(allAirportIATAs.toString());
 		
-		Routes r1 = new Routes();
+		//Airports a1 = new Airports();
+		//Airports a2 = new Airports();
 		
-		writeOutputTxt(r1.getAllRoutes());
+		//Routes r1 = new Routes();
+		
+		//writeOutputTxt(r1.getAllRoutes());
 	}
 
 }
