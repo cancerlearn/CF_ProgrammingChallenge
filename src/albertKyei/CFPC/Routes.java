@@ -18,19 +18,27 @@ import java.io.FileNotFoundException;
 public class Routes {
 	
 	/**
-	 * 
+	 * This hashmap contains the source airport IATA and all it's possible destinations
 	 */
 	private Map<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
 	
-	public Routes(String source) {
+	private String routeOutput;
+	
+	/**
+	 * Default constructor
+	 * 
+	 * @param sourceIATA
+	 * @param destinationIATA
+	 */
+	public Routes(String sourceIATA, String destinationIATA) {
 		
 		/**
 		 * ArrayList containing all possible destinations from the source given
 		 */
 		ArrayList<String> destinations = new ArrayList<String>();
-		routes.put(source, destinations);
+		routes.put(sourceIATA, destinations);
 		
-		fillRoutes(source);
+		routeOutput = findDestinations(sourceIATA, destinationIATA);
 		
 	}
 	
@@ -39,7 +47,7 @@ public class Routes {
 	 * 
 	 * @param source
 	 */
-	private void fillRoutes(String source) {
+	private String findDestinations(String sourceIATA, String destinationIATA) {
 		
 		BufferedReader bRouteRead = null;
 		
@@ -47,30 +55,53 @@ public class Routes {
 			
 			bRouteRead = new BufferedReader(new FileReader("routes.csv"));
 			String routeLine = "";
-			//Iterating through the lines until the last
+			
+			Airports sourceAirport = new Airports(sourceIATA);
+			
+			//Iterating through the lines in route.csv until the last
 			while((routeLine = bRouteRead.readLine()) != null) {
 				
-				//Field storing the source airport code
-				String sourceAirportCode = routeLine.split(",")[2];
+				String sourceAirportCodes = routeLine.split(",")[2];     //Field storing the source airport codes				
 				
-				//Calculating distance between airports
-				double distance = findDistance(new Airports(sourceAirportCode), new Airports(routeLine.split(",")[4]));
-				
-				//Calculating distance between airports
-				double distance = findDistance(new Airports(sourceAirportCode), new Airports(routeLine.split(",")[4]));
-				
+				if (sourceAirportCodes.equals(sourceIATA) && routeLine.split(",")[4].equals(destinationIATA)) {
+					
+					String destinationAirportCode = routeLine.split(",")[4];     //Field storing the destination airport code
+					
+					//Calculating distance between airports
+					double distance = findDistance(sourceAirport, new Airports(destinationAirportCode));
+					
+					String airlineID = routeLine.split(",")[1];     //Field storing airline ID for route between source and destination airport
 
-				//Field storing the destination airport code
-				String destinationAirportCode = routeLine.split(",")[4] + " | " + routeLine.split(",")[7] + " | " + routeLine.split(",")[1] + " | " + Double.toString(distance);
-				
-				if (sourceAirportCode.equals(source)) {
+					//Field storing the destination airport code 
+					//+ routeLine.split(",")[7] + " | " This is number of stops
+					String sourcedestinationRoute = "AirlineID: " + airlineID + " | " +  "DestinationAirportCode: " + destinationAirportCode + " | Stops: " + routeLine.split(",")[7] + " | Distance: " + Double.toString(distance) + "km";
+					
+					routeOutput = sourcedestinationRoute;
+					
+					return sourcedestinationRoute;
+					
+				}
+				//This code runs if the destination airport is not among the direct 
+				else if (sourceAirportCodes.equals(sourceIATA)) {
+					
+					String destinationAirportCode = routeLine.split(",")[4];     //Field storing the source airport code
+
+					//Calculating distance between airports
+					double distance = findDistance(sourceAirport, new Airports(destinationAirportCode));
+					
+					String airlineID = routeLine.split(",")[1];
+
+					//Field storing the destination airport code 
+					//+ routeLine.split(",")[7] + " | " This is number of stops
+					String destinationAirport = destinationAirportCode + " | "  + airlineID + " | " + Double.toString(distance) + "km";
 					
 					//ArrayList of destinations for the specific source being updated
-					ArrayList<String> newDestinations = routes.get(source);
-					newDestinations.add(destinationAirportCode);
+					ArrayList<String> newDestinations = routes.get(sourceIATA);  
+					newDestinations.add(destinationAirport);
 					
-					routes.put(source, newDestinations);
+					routes.put(sourceIATA, newDestinations);
 					
+					//return findIndirectRoute();					
 				}
 				
 			}
@@ -87,12 +118,25 @@ public class Routes {
 		} finally {
 			
 			try {
-				if(bRouteRead != null) bRouteRead.close();
+ 				if(bRouteRead != null) bRouteRead.close();
 			} catch(IOException ioe) {
 				ioe.printStackTrace();
 			}
 			
 		}
+		
+		return "";
+	}
+	
+	public String findSources() {
+		
+		
+		
+	}
+	
+	public String findIndirectRoute() {
+		
+		
 		
 	}
 	
@@ -120,11 +164,12 @@ public class Routes {
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 		double d = r * c;
 		
-		return d;
+		return Math.round(d*1000.0)/1000.0;
 		
 	}
 	
-	public String getAllRoutes(String start, String end) {
+	
+/*	public String getAllRoutes(String start, String end) {
 		String output = "";
 		int flights = 0;
 		
@@ -138,6 +183,8 @@ public class Routes {
 			//Fourth step: find any matches among the main source's list of destinations and the final destination's list of possible source
 			//Fifth step: carry this out recursively until a match is found
 			
+			
+			
 		} catch(FileNotFoundException fnfe) {
 			
 			fnfe.printStackTrace();
@@ -146,11 +193,19 @@ public class Routes {
 		}
 		
 		return output;
+	}*/
+
+	/**
+	 * @return the routeOutput
+	 */
+	public String getRouteOutput() {
+		return routeOutput;
 	}
 
 	public static void main(String[]args) {
-		Routes r1 = new Routes("SVX");
+		Routes r1 = new Routes("SVX", "NJC");
 		System.out.println(r1.routes.toString());
+		System.out.println(r1.getRouteOutput());
 	}
 
 }

@@ -41,12 +41,65 @@ public class Airports {
 	 * 
 	 * @param IATA
 	 */
-	
-	
 	public Airports(String IATA) {
 		
 		this.IATA = IATA;
 		
+		BufferedReader bRead = null;
+		
+		try {
+			
+			bRead = new BufferedReader(new FileReader("airports.csv"));
+			
+			String line = "";
+			
+			while((line = bRead.readLine()) != null) {
+				
+				String sourceAirport = line.split(",")[4].replaceAll("\"", ""); 
+				if (IATA.equals(sourceAirport)) {
+					
+					this.latitude = Double.parseDouble(line.split(",")[6]);
+					
+					this.longitude = Double.parseDouble(line.split(",")[7]);
+					
+				}
+				
+			}
+			
+		} catch(FileNotFoundException fnfe) {
+			
+			fnfe.printStackTrace();
+			System.out.println("File does not exist.");
+			
+		} catch(IOException ioe) {
+			
+			ioe.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if(bRead != null) bRead.close();
+			} catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Secondary constructor.
+	 * Used when latitude and longitude are known at intialization of the object.
+	 * 
+	 * @param IATA
+	 * @param latitude
+	 * @param longitude
+	 */
+	public Airports(String IATA, double latitude, double longitude) {
+		
+		this.IATA = IATA;
+		this.latitude = latitude;
+		this.longitude = longitude;
 		
 		
 	}
@@ -94,7 +147,7 @@ public class Airports {
 	}
 
 	/**
-	 * This method returns an a list of all airport's IATAs in a given city and country
+	 * This method returns an a list of all airport's IATAs in a given city and country.
 	 * 
 	 * @param city
 	 * @param country
