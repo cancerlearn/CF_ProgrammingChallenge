@@ -221,8 +221,13 @@ public class Routes {
 
 	public static void main(String[]args) {
 
+
 		Routes r1 = new Routes("SVX", "NBC");
 		System.out.println(r1.destinations.toString());
+
+		Routes r1 = new Routes("VNS", "DYU");
+		//System.out.println(r1.destinations.toString());
+
 
 		Routes r1 = new Routes("VNS", "DYU");
 		//System.out.println(r1.destinations.toString());
