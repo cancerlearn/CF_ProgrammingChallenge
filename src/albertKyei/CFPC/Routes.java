@@ -128,9 +128,94 @@ public class Routes {
 		return "";
 	}
 	
-	public String findSources() {
+	/**
+	 * This returns a route starting at the destination and ending at the source
+	 * @param sourceIATA
+	 * @param destinationIATA
+	 * @return
+	 */
+	public String findSources(String sourceIATA, String destinationIATA) {
 		
+		BufferedReader bRouteRead = null;
 		
+		try {
+			
+			bRouteRead = new BufferedReader(new FileReader("routes.csv"));
+			String routeLine = "";
+			
+			Airports destinationAirport = new Airports(destinationIATA);
+			
+			//Iterating through the lines in route.csv until the last
+			while((routeLine = bRouteRead.readLine()) != null) {
+				
+				String destinationAirportCodes = routeLine.split(",")[2];     //Field storing the source destination codes				
+				
+				if (destinationAirportCodes.equals(destinationIATA) && routeLine.split(",")[4].equals(sourceIATA)) {
+					
+					String sourceAirportCode = routeLine.split(",")[4];     //Field storing the source airport code
+					
+					//Calculating distance between airports
+					double distance = findDistance(destinationAirport, new Airports(sourceAirportCode));
+					
+					String airlineID = routeLine.split(",")[1];     //Field storing airline ID for route between source and destination airport
+
+					//Field storing the destination airport code 
+					//+ routeLine.split(",")[7] + " | " This is number of stops
+					String sourcedestinationRoute = "AirlineID: " + airlineID + " | " +  "SourceAirportCode: " + sourceAirportCode + " | Stops: " + routeLine.split(",")[7] + " | Distance: " + Double.toString(distance) + "km";
+					
+					routeOutput = sourcedestinationRoute;
+					
+					return sourcedestinationRoute;
+					
+				}
+				//This code runs if the destination airport is not among the direct 
+				else if (destinationAirportCodes.equals(destinationIATA)) {
+					
+					String sourceAirportCode = routeLine.split(",")[4];     //Field storing the source airport code
+
+					//Calculating distance between airports
+					double distance = findDistance(destinationAirport, new Airports(sourceAirportCode));
+					
+					String airlineID = routeLine.split(",")[1];
+
+					//Field storing the source airport code 
+					//+ routeLine.split(",")[7] + " | " This is number of stops
+					String sourceAirport = sourceAirportCode + " | "  + airlineID + " | " + Double.toString(distance) + "km";
+					
+					/*
+					//ArrayList of destinations for the specific source being updated
+					ArrayList<String> newDestinations = routes.get(sourceIATA);  
+					newDestinations.add(destinationAirport);
+					
+					routes.put(sourceIATA, newDestinations);
+					
+					//return findIndirectRoute();
+					 * 					
+					 */
+				}
+				
+			}
+			
+		} catch(FileNotFoundException fnfe) {
+			
+			fnfe.printStackTrace();
+			System.out.println("File does not exist.");
+			
+		} catch(IOException ioe) {
+			
+			ioe.printStackTrace();
+			
+		} finally {
+			
+			try {
+ 				if(bRouteRead != null) bRouteRead.close();
+			} catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+			
+		}
+		
+		return "";
 		
 	}
 	
