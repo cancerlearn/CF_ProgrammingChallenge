@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.io.FileNotFoundException;
 
 /**
- * @author Albert Kyei
+ * @author 
  * @version 1.0
  * 
  * This class is the center of attention where everything happens.

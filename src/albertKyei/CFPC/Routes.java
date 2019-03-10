@@ -12,17 +12,20 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 /**
- * @author Albert Kyei
+ * @author 
  *
  */
 public class Routes {
 	
 	/**
-	 * This hashmap contains the source airport IATA and all it's possible destinations
+	 * This ArrayList contains the source airport's possible destinations
 	 */
-	private Map<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
+	private ArrayList<String> routes = new ArrayList<String>();
+	//private Map<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
+	
 	
 	private String routeOutput;
+	
 	
 	/**
 	 * Default constructor
@@ -35,20 +38,25 @@ public class Routes {
 		/**
 		 * ArrayList containing all possible destinations from the source given
 		 */
-		ArrayList<String> destinations = new ArrayList<String>();
-		routes.put(sourceIATA, destinations);
+		//ArrayList<String> destinations = new ArrayList<String>();
+		//routes.put(sourceIATA, destinations);
 		
-		routeOutput = findDestinations(sourceIATA, destinationIATA);
+		Airlines a1 = new Airlines();
+		routeOutput = findDestinations(sourceIATA, destinationIATA, a1);
 		
 	}
+	
+	
+	//--------------------------- Start of Auxiliary methods ---------------------------
 	
 	/**
 	 * This method creates a hashmap of a source airport and all its possible destinations
 	 * 
 	 * @param source
 	 */
-	private String findDestinations(String sourceIATA, String destinationIATA) {
+	private String findDestinations(String sourceIATA, String destinationIATA, Airlines a1) {
 		
+		System.out.println("Start of findDestinations(): "+System.currentTimeMillis());
 		BufferedReader bRouteRead = null;
 		
 		try {
@@ -58,52 +66,43 @@ public class Routes {
 			
 			Airports sourceAirport = new Airports(sourceIATA);
 			
-			//Iterating through the lines in route.csv until the last
+			//This while loop is intended to find a match of the destination among the source airport's list of possible destination
+			//If found the right output string is returned
+			//Else, the loop keeps running and storing all the source's possible destinations
 			while((routeLine = bRouteRead.readLine()) != null) {
 				
-				String sourceAirportCodes = routeLine.split(",")[2];     //Field storing the source airport codes				
+				String airportIATAInFIle = routeLine.split(",")[2];     //Field storing the source airport codes
 				
-				if (sourceAirportCodes.equals(sourceIATA) && routeLine.split(",")[4].equals(destinationIATA)) {
+				String destinationAirportIATA = routeLine.split(",")[4];
+				
+				String airlineID = routeLine.split(",")[1];
+
+				//If the airline is active
+				if (airportIATAInFIle.equals(sourceIATA) && a1.getAirlineActive(airlineID)) {
 					
-					String destinationAirportCode = routeLine.split(",")[4];     //Field storing the destination airport code
 					
 					//Calculating distance between airports
-					double distance = findDistance(sourceAirport, new Airports(destinationAirportCode));
+					double distance = findDistance(sourceAirport, new Airports(destinationAirportIATA));
 					
-					String airlineID = routeLine.split(",")[1];     //Field storing airline ID for route between source and destination airport
-
-					//Field storing the destination airport code 
-					//+ routeLine.split(",")[7] + " | " This is number of stops
-					String sourcedestinationRoute = "AirlineID: " + airlineID + " | " +  "DestinationAirportCode: " + destinationAirportCode + " | Stops: " + routeLine.split(",")[7] + " | Distance: " + Double.toString(distance) + "km";
 					
-					routeOutput = sourcedestinationRoute;
+					String routeToDestination = "AirlineID: " + airlineID + ", DestinationAirportCode: " + destinationAirportIATA + ", Stops: " + routeLine.split(",")[7] + 
+							", Distance: " + Double.toString(distance) + "km";
 					
-					return sourcedestinationRoute;
-					
-				}
-				//This code runs if the destination airport is not among the direct 
-				else if (sourceAirportCodes.equals(sourceIATA)) {
-					
-					String destinationAirportCode = routeLine.split(",")[4];     //Field storing the source airport code
-
-					//Calculating distance between airports
-					double distance = findDistance(sourceAirport, new Airports(destinationAirportCode));
-					
-					String airlineID = routeLine.split(",")[1];
-
-					//Field storing the destination airport code 
-					//+ routeLine.split(",")[7] + " | " This is number of stops
-					String destinationAirport = destinationAirportCode + " | "  + airlineID + " | " + Double.toString(distance) + "km";
 					
 					//ArrayList of destinations for the specific source being updated
-					ArrayList<String> newDestinations = routes.get(sourceIATA);  
-					newDestinations.add(destinationAirport);
+					routes.add(routeToDestination);
 					
-					routes.put(sourceIATA, newDestinations);
-					
-					//return findIndirectRoute();					
+					if (airportIATAInFIle.equals(sourceIATA) && destinationAirportIATA.equals(destinationIATA)) { 
+						//Take into account different airlines for one route?
+						System.out.println("End of findDestinations(): "+System.currentTimeMillis()); 
+						
+						return routeToDestination;
+					}
+				
 				}
 				
+				
+					
 			}
 			
 		} catch(FileNotFoundException fnfe) {
@@ -124,7 +123,7 @@ public class Routes {
 			}
 			
 		}
-		
+		System.out.println("End of findDestinations(): "+System.currentTimeMillis());
 		return "";
 	}
 	
@@ -140,6 +139,7 @@ public class Routes {
 		
 	}
 	
+	
 	/**
 	 * This function uses the harvesine function to calculate the distance between two airports.
 	 * @param a1
@@ -148,6 +148,7 @@ public class Routes {
 	 */
 	private double findDistance(Airports a1, Airports a2) {
 		
+		System.out.println("Start of findDistance(): "+System.currentTimeMillis());
 		//Instance variables for harvesine formula, where r is the earths radius in km
 		int r = 6731;
 		double lat1 = Math.toRadians(a1.getLatitude());
@@ -164,10 +165,12 @@ public class Routes {
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 		double d = r * c;
 		
+		System.out.println("End of findDistance(): "+System.currentTimeMillis());
 		return Math.round(d*1000.0)/1000.0;
 		
 	}
 	
+	//--------------------------- End of Auxiliary methods ---------------------------
 	
 /*	public String getAllRoutes(String start, String end) {
 		String output = "";
@@ -203,7 +206,7 @@ public class Routes {
 	}
 
 	public static void main(String[]args) {
-		Routes r1 = new Routes("SVX", "NJC");
+		Routes r1 = new Routes("SVX", "YWG");
 		System.out.println(r1.routes.toString());
 		System.out.println(r1.getRouteOutput());
 	}

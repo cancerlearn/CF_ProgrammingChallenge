@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
- * @author Albert Kyei
+ * @author 
  * @version 1.0
  *
  * This class handles all information of the airports and any interaction with said information.
