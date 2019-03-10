@@ -126,6 +126,7 @@ public class Routes {
 			}
 			
 		}
+		
 		System.out.println("End of findDestinations(): "+System.currentTimeMillis());
 		return "";
 	}
@@ -279,7 +280,7 @@ public class Routes {
 	}
 
 	public static void main(String[]args) {
-		Routes r1 = new Routes("SVX", "YWG");
+		Routes r1 = new Routes("SVX", "NBC");
 		System.out.println(r1.destinations.toString());
 		System.out.println(r1.getRouteOutput());
 	}
