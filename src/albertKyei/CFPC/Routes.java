@@ -20,7 +20,9 @@ public class Routes {
 	/**
 	 * This ArrayList contains the source airport's possible destinations
 	 */
-	private ArrayList<String> routes = new ArrayList<String>();
+	private ArrayList<String> destinations = new ArrayList<String>();
+	
+	private ArrayList<String> sources = new ArrayList<String>();
 	//private Map<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
 	
 	
@@ -62,6 +64,7 @@ public class Routes {
 		try {
 			
 			bRouteRead = new BufferedReader(new FileReader("routes.csv"));
+			
 			String routeLine = "";
 			
 			Airports sourceAirport = new Airports(sourceIATA);
@@ -90,7 +93,7 @@ public class Routes {
 					
 					
 					//ArrayList of destinations for the specific source being updated
-					routes.add(routeToDestination);
+					destinations.add(routeToDestination);
 					
 					if (airportIATAInFIle.equals(sourceIATA) && destinationAirportIATA.equals(destinationIATA)) { 
 						//Take into account different airlines for one route?
@@ -127,9 +130,79 @@ public class Routes {
 		return "";
 	}
 	
-	public String findSources() {
+	/**
+	 * This returns a route starting at the destination and ending at the source
+	 * @param sourceIATA
+	 * @param destinationIATA
+	 * @return
+	 */
+	public String findSources(String sourceIATA, String destinationIATA, Airlines a1) {
 		
+		BufferedReader bRouteRead = null;
 		
+		try {
+			
+			bRouteRead = new BufferedReader(new FileReader("routes.csv"));
+			
+			String routeLine = "";
+			
+			Airports destinationAirport = new Airports(destinationIATA);
+			
+			//Iterating through the lines in route.csv until the last
+			while((routeLine = bRouteRead.readLine()) != null) {
+				
+				String airportIATAInFIle = routeLine.split(",")[4];     //Field storing the destination airport code
+				
+				String sourceAirportIATA = routeLine.split(",")[2];     //Field storing the source airport codes
+				
+				String airlineID = routeLine.split(",")[1];
+
+				//If the airline is active and the destinationIATA is the desired one
+				if (airportIATAInFIle.equals(destinationIATA) && a1.getAirlineActive(airlineID)) {
+					
+					
+					//Calculating distance between airports
+					double distance = findDistance(destinationAirport, new Airports(sourceAirportIATA));
+					
+					
+					String routeFromSource = "AirlineID: " + airlineID + ", SourceAirportCode: " + sourceAirportIATA + ", Stops: " + routeLine.split(",")[7] + 
+							", Distance: " + Double.toString(distance) + "km";
+					
+					
+					//ArrayList of destinations for the specific source being updated
+					sources.add(routeFromSource);
+					
+					if (airportIATAInFIle.equals(destinationIATA) && sourceAirportIATA.equals(sourceIATA)) { 
+						//Take into account different airlines for one route?
+						System.out.println("End of findDestinations(): "+System.currentTimeMillis()); 
+						
+						return routeFromSource;
+					}
+				
+				}
+							
+			}
+			
+		} catch(FileNotFoundException fnfe) {
+			
+			fnfe.printStackTrace();
+			System.out.println("File does not exist.");
+			
+		} catch(IOException ioe) {
+			
+			ioe.printStackTrace();
+			
+		} finally {
+			
+			try {
+ 				if(bRouteRead != null) bRouteRead.close();
+			} catch(IOException ioe) {
+				ioe.printStackTrace();
+			}
+			
+		}
+		
+		return "";
 		
 	}
 	
@@ -207,7 +280,7 @@ public class Routes {
 
 	public static void main(String[]args) {
 		Routes r1 = new Routes("SVX", "YWG");
-		System.out.println(r1.routes.toString());
+		System.out.println(r1.destinations.toString());
 		System.out.println(r1.getRouteOutput());
 	}
 
