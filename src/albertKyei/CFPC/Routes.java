@@ -168,7 +168,7 @@ public class Routes {
 					return sourcedestinationRoute;
 					
 				}
-				//This code runs if the source airport is not among the direct 
+				//This code runs if the source airport is not among the direct routes
 				else if (destinationAirportCodes.equals(destinationIATA)) {
 					
 					String sourceAirportCode = routeLine.split(",")[4];     //Field storing the source airport code
