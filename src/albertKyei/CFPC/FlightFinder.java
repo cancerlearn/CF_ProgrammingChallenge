@@ -154,7 +154,6 @@ public class FlightFinder {
 	 */
 	private static String findIndirectRoute(ArrayList<String> possibleDestinations, String parentDestination, ArrayList<String> path, int level) {
 		
-		//Routes parentRoute = new Routes(FlightFinder.airlines, parentDestination, desiredDestination, path);
 		Routes r1 = null;
 		
 		String intermediaryDestination = null;
