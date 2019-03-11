@@ -2,17 +2,15 @@
  * 
  */
 package albertKyei.CFPC;
-import albertKyei.CFPC.Airports;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
 /**
- * @author 
+ * @author Albert Kyei & Goodie Dawson
+ * @version 1.0
  *
  */
 public class Routes {
@@ -22,30 +20,49 @@ public class Routes {
 	 */
 	private ArrayList<String> destinations = new ArrayList<String>();
 	
-
 	private String routeOutput;
 	
 	private String directRoute;
 	
+	private Airlines a1;
+	
+	private String airlineID;
+	
+	private String sourceID;
+	
+	private String sourceIATA;
+	
+	private String destinationID;
+	
+	private String destinationIATA;
+	
+	private String stops;
+	
+	@SuppressWarnings("unused")
+	private ArrayList<String> previousRoutes;
+	
 	/**
 	 * Default constructor
 	 * 
-	 * @param sourceIATA
-	 * @param destinationIATA
+	 * 
+	 * @param a1
+	 * @param sourceID
+	 * @param destinationID
+	 * @param previousRoute
 	 */
-	public Routes(String sourceIATA, String destinationIATA) {
+	public Routes(Airlines a1, String sourceID, String destinationID, ArrayList<String> previousRoute) {
 		
-		/**
-		 * ArrayList containing all possible destinations from the source given
-		 */
-		//ArrayList<String> destinations = new ArrayList<String>();
-		//routes.put(sourceIATA, destinations);
+		directRoute = "No";
 		
-		directRoute = "";
+		this.a1 = a1;
 		
-		Airlines a1 = new Airlines();
+		this.sourceID = sourceID;
 		
-		routeOutput = findDestinations(sourceIATA, destinationIATA, a1);
+		this.destinationID = destinationID;
+		
+		this.previousRoutes = new ArrayList<String>();
+		
+		routeOutput = findDirectDestination(sourceID, destinationID, a1);
 		
 	}
 	
@@ -53,13 +70,18 @@ public class Routes {
 	//--------------------------- Start of Auxiliary methods ---------------------------
 	
 	/**
-	 * This method creates a hashmap of a source airport and all its possible destinations
+	 * This method finds a direct route between a source and destination airport
+	 * If it does not exist, the simultaneous creation of possible destinations from
+	 * the source airport is utilized in finding an indirect route
 	 * 
-	 * @param source
+	 * @param sourceID
+	 * @param destinationID
+	 * @param a1
+	 * @return
 	 */
-	private String findDestinations(String sourceIATA, String destinationIATA, Airlines a1) {
+	private String findDirectDestination(String sourceID, String destinationID, Airlines a1) {
 		
-		System.out.println("Start of findDestinations(): "+System.currentTimeMillis());
+		//System.out.println("Start of findDestinations(): "+System.currentTimeMillis());
 		
 		BufferedReader bRouteRead = null;
 		
@@ -69,37 +91,42 @@ public class Routes {
 			
 			String routeLine = "";
 			
-			Airports sourceAirport = new Airports(sourceIATA);
-			
 			//This while loop is intended to find a match of the destination among the source airport's list of possible destination
 			//If found the right output string is returned
 			//Else, the loop keeps running and storing all the source's possible destinations
 			while((routeLine = bRouteRead.readLine()) != null) {
 				
-				String airportIATAInFIle = routeLine.split(",")[2];     //Field storing the source airport codes
+				String sourceAirportIDInFIle = routeLine.split(",")[3];     //Field storing the source airport codes
 				
-				String destinationAirportIATA = routeLine.split(",")[4];
+				String destinationAirportID = routeLine.split(",")[5];     //Field storing the destination airport codes
 				
-				String airlineID = routeLine.split(",")[1];
+				String airlineID = routeLine.split(",")[1];     //Field storing the airline IDs
 				
 				//If the airline is active
-				if (airportIATAInFIle.equals(sourceIATA) && a1.getAirlineActive(airlineID)) {
+				if (sourceAirportIDInFIle.equals(sourceID) && a1.getAirlineActive(airlineID)) {
 					
-					System.out.println(airportIATAInFIle);
-					//Calculating distance between airports
-					double distance = findDistance(sourceAirport, new Airports(destinationAirportIATA));
+					String sourceIATA = routeLine.split(",")[2];     //Field storing the source airport IATAs
 					
+					String destinationIATA = routeLine.split(",")[4];     //Field storing the destination airport IATAs
 					
-					String routeToDestination = "AirlineID: " + airlineID + ", DestinationAirportCode: " + destinationAirportIATA + ", Stops: " + routeLine.split(",")[7] + 
-							", Distance: " + Double.toString(distance) + "km";
+					String stops = routeLine.split(",")[7];
 					
+					String routeToDestination = "AirlineID: " + airlineID + ", from SourceAirportIATA: " + sourceIATA + "_" + sourceAirportIDInFIle + 
+							", DestinationAirportIATA: " + destinationIATA + "_" + destinationAirportID + 
+							", Stops: " + stops;
 					
 					//ArrayList of destinations for the specific source being updated
 					destinations.add(routeToDestination);
 					
-					if (airportIATAInFIle.equals(sourceIATA) && destinationAirportIATA.equals(destinationIATA)) { 
+					if (sourceAirportIDInFIle.equals(sourceID) && destinationAirportID.equals(destinationID)) { 
 						
-						System.out.println("End of findDestinations(): "+System.currentTimeMillis()); 
+						//System.out.println("End of findDestinations(): "+System.currentTimeMillis());
+
+						this.sourceIATA = sourceIATA;
+						
+						this.destinationIATA = destinationIATA;
+						
+						this.stops = stops;
 						
 						directRoute = routeToDestination;
 						
@@ -130,82 +157,66 @@ public class Routes {
 			}
 			
 		}
-		System.out.println("End of findDestinations(): "+System.currentTimeMillis());
-		
-		return findIndirectRoute(destinations, destinationIATA);
+		//System.out.println("End of findDestinations(): "+System.currentTimeMillis());
 
-	}
+		return "";
+	}	
 	
-	
-	public String findIndirectRoute(ArrayList<String> possibleDestinations, String mainDestination) {
-		System.out.println("Here they are: "+possibleDestinations.toString());
-		for (String possibleDestination: possibleDestinations) {
-			
-			Routes r1 = new Routes(possibleDestination, mainDestination);
-			
-			if (!(r1.getDirectRoute().equals(""))) {
-				
-				return r1.getRouteOutput();
-				
-			}
-			
-			return possibleDestination + " TO " + r1.getRouteOutput();
-			
-		}
-		
-		return "Unsupported Request!";
-		
-	}
-	
-	
-	/**
-	 * This function uses the harvesine function to calculate the distance between two airports.
-	 * @param a1
-	 * @param a2
-	 * @return the distance
-	 */
-	private double findDistance(Airports a1, Airports a2) {
-		
-		//System.out.println("Start of findDistance(): "+System.currentTimeMillis());
-		//Instance variables for harvesine formula, where r is the earths radius in km
-		int r = 6731;
-		double lat1 = Math.toRadians(a1.getLatitude());
-		double lat2 = Math.toRadians(a2.getLatitude());
-		double lon1 = Math.toRadians(a1.getLongitude());
-		double lon2 = Math.toRadians(a2.getLongitude());
-		
-		double latdif = lat2 - lat1;
-		double londif = lon2 - lon1;
-		
-		//Harvesine calculation
-		double a = Math.sin(latdif/2) * Math.sin(latdif/2) + Math.cos(lat1) * Math.cos(lat2) *
-		        Math.sin(londif/2) * Math.sin(londif/2);
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		double d = r * c;
-		
-		//System.out.println("End of findDistance(): "+System.currentTimeMillis());
-		return Math.round(d*1000.0)/1000.0;
-		
-	}
 	
 	//--------------------------- End of Auxiliary methods ---------------------------
 
+
+	
+	//--------------------------- Start of Getters & Setters ---------------------------
+	
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "";
+		return "AirlineID: " + this.airlineID + ", from SourceAirportIATA: " + this.sourceIATA + "_" + this.sourceID + 
+				", DestinationAirportIATA: " + destinationIATA + "_" + this.destinationID + 
+				", Stops: " + this.stops;
 	}
 
-	//--------------------------- Start of Getters ---------------------------
-	
+
 	/**
 	 * @return the routeOutput
 	 */
 	public String getRouteOutput() {
 		return routeOutput;
+	}
+	
+	/**
+	 * @return the sourceIATA
+	 */
+	public String getSourceID() {
+		return sourceID;
+	}
+
+
+	/**
+	 * @return the destinationIATA
+	 */
+	public String getDestinationID() {
+		return destinationID;
+	}
+
+
+	/**
+	 * @param routeOutput the routeOutput to set
+	 */
+	public void setRouteOutput(String routeOutput) {
+		this.routeOutput = routeOutput;
+	}
+
+
+	/**
+	 * @return the destinations
+	 */
+	public ArrayList<String> getDestinations() {
+		return destinations;
 	}
 
 
@@ -216,12 +227,6 @@ public class Routes {
 		return directRoute;
 	}
 
-	//--------------------------- End of Getters ---------------------------
-
-	public static void main(String[]args) {
-		Routes r1 = new Routes("VNS", "DYU");
-		//System.out.println(r1.destinations.toString());
-		System.out.println(r1.getRouteOutput());
-	}
+	//--------------------------- End of Getters % Setters ---------------------------
 
 }

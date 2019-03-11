@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author 
+ * @author Albert Kyei & Goodie Dawson
+ * @version 1.0
  *
  */
 public class Airlines {
@@ -35,7 +36,7 @@ public class Airlines {
 	//---------------------------Auxiliary method
 	
 	private void findActives() {
-		System.out.println("Start of findActives(): "+System.currentTimeMillis());
+		
 		BufferedReader readAirlines = null;
 		
 		try {
@@ -74,7 +75,6 @@ public class Airlines {
 			}
 			
 		}
-		System.out.println("End of findActives(): "+System.currentTimeMillis());
 		
 	}
 	
