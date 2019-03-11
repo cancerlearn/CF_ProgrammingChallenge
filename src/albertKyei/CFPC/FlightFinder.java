@@ -156,22 +156,13 @@ public class FlightFinder {
 	 */
 	private static String findIndirectRoute(ArrayList<String> possibleDestinations, String parentDestination, ArrayList<String> path, int level) {
 		
-		/*Pseudo Code for Breadth First
-		 * 
-		 * Iterate through all children of parent
-		 * Check if any are desired destination
-		 * If so end
-		 * Else use threads to check all children of previous children
-		 * Repeat until desired destination is found
-		 * 
-		 */
+		
 		
 		//Routes parentRoute = new Routes(FlightFinder.airlines, parentDestination, desiredDestination, path);
 		Routes r1 = null;
 		String intermediaryDestination = null;
 		
-		//---------------------------------------------- First Loop ---------------------------------------------------
-		
+
 		for (String currentDestination: possibleDestinations) {
 			
 			//Intermediary destination between main source and main destination is obtained
