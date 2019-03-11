@@ -143,7 +143,17 @@ public class FlightFinder {
 	}
 	
 	
-
+	/**
+	 * This method finds the indirect route between two airports.
+	 * It is recursive and utilizes the Routes class to find this route.
+	 * The first route found is returned.
+	 * 
+	 * @param possibleDestinations
+	 * @param parentDestination
+	 * @param path
+	 * @param level
+	 * @return
+	 */
 	private static String findIndirectRoute(ArrayList<String> possibleDestinations, String parentDestination, ArrayList<String> path, int level) {
 		
 		/*Pseudo Code for Breadth First
