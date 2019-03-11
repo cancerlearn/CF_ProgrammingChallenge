@@ -157,7 +157,6 @@ public class Routes {
 			}
 			
 		}
-		//System.out.println("End of findDestinations(): "+System.currentTimeMillis());
 
 		return "";
 	}	
@@ -226,7 +225,5 @@ public class Routes {
 	public String getDirectRoute() {
 		return directRoute;
 	}
-
-	//--------------------------- End of Getters % Setters ---------------------------
 
 }

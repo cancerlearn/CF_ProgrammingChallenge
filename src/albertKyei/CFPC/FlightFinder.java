@@ -263,17 +263,17 @@ public class FlightFinder {
 		
 		//Find the source airports in given city and country
 		ArrayList<String> allSourceAirportCodes = Airports.findAirportCodes(sourceCity, sourceCountry);
-		System.out.println("allSourceAirportCodes: " + allSourceAirportCodes.toString());
 		
 		//Find the destination airports in given city and country
 		ArrayList<String> allDestinationAirportCodes = Airports.findAirportCodes(destinationCity, destinationCountry);
-		System.out.println("allDestinationAirportCodes: " + allDestinationAirportCodes.toString()+"\n\n");
 		
 		//Create route object between initial and final destination
 		Routes route1 = null;
+		
 		try {
+			
 			route1 = new Routes(FlightFinder.airlines, allSourceAirportCodes.get(0), allDestinationAirportCodes.get(0), new ArrayList<String>());
-			System.out.println("\n"+route1.getDestinations().toString()+"\n");
+			
 		} catch(IndexOutOfBoundsException iobe) {
 			
 			System.out.println("Airport for source or destination does not exist.\nUnsupported Request.");
@@ -312,10 +312,8 @@ public class FlightFinder {
 		
 		}
 		
-		System.out.println(route1.getRouteOutput());
 		writeOutputTxt(route1.getRouteOutput());
 		
-	
 		System.out.println("End: "+System.currentTimeMillis());
 		
 	}
