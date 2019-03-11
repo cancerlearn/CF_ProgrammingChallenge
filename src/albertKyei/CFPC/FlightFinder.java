@@ -12,8 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
 
+
 /**
- * @author 
+ * @author Albert Kyei & Goodie Dawson
  * @version 1.0
  * 
  * This class is the center of attention where everything happens.
@@ -66,7 +67,13 @@ public class FlightFinder {
 		
 	}
 	
-	private static void writeOutputTxt(String outTxt) {
+	/**
+	 * This method takes in the routeOutput, converts it to the required format and writes it to the output file.
+	 * 
+	 * @param outTxt
+	 * @param outfile
+	 */
+	private static void writeOutputTxt(String outTxt, String outfile) {
 		
 		BufferedWriter bWrite = null;
 		
@@ -75,7 +82,21 @@ public class FlightFinder {
 		
 		try {
 			
-			bWrite = new BufferedWriter(new FileWriter("destinationfrom-X-to-Y_output.txt"));
+			bWrite = new BufferedWriter(new FileWriter(outfile+"_output.txt"));
+			
+			if (outTxt.equals("Unsupported Request")) {
+				
+				bWrite.write(outTxt);
+				
+				try {
+					if(bWrite != null) bWrite.close();
+				} catch(IOException ioe) {
+					ioe.printStackTrace();
+				}
+				
+				return;
+				
+			}
 			
 			String[] points = outTxt.split(" --- To --- ");
 			
@@ -91,8 +112,8 @@ public class FlightFinder {
 				//System.out.println(point+" Point\n");
 				numberOfFlights++;
 				
-				String airlineID = point.split(",")[0].split(": ")[1];
-				line += airlineID + " from ";
+				String airlineID_IATA = point.split(",")[0].split(": ")[1];
+				line += airlineID_IATA + " from ";
 				
 				String sourceAirportIATA = point.split(",")[1].split(": ")[1].split("_")[0];
 				line += sourceAirportIATA + " to ";
@@ -158,6 +179,7 @@ public class FlightFinder {
 		
 		String intermediaryDestination = null;
 		
+
 		for (String currentDestination: possibleDestinations) {
 			
 			//Intermediary destination between main source and main destination is obtained
@@ -237,7 +259,14 @@ public class FlightFinder {
 		System.out.println("Start: "+System.currentTimeMillis());
 
 		//Store starting point and destination
-		String[] inputTxt = getInputTxt(args[0]);
+		String[] inputTxt = null;
+		if (!args[0].contains(".txt")) {
+			inputTxt = getInputTxt(args[0]+".txt");
+		}
+		
+		else {
+			inputTxt = getInputTxt(args[0]);
+		}
 
 		//These two fields store the city and country of source
 		String sourceCity = inputTxt[0].split(", ")[0];
@@ -261,7 +290,8 @@ public class FlightFinder {
 			route1 = new Routes(FlightFinder.airlines, allSourceAirportCodes.get(0), allDestinationAirportCodes.get(0), new ArrayList<String>());
 			
 		} catch(IndexOutOfBoundsException iobe) {
-			
+			System.out.println("came: "+args[0]);
+			writeOutputTxt("Unsupported Request", args[0]);
 			System.out.println("Airport for source or destination does not exist.\nUnsupported Request.");
 			System.exit(0);
 		}
@@ -298,7 +328,9 @@ public class FlightFinder {
 		
 		}
 		
-		writeOutputTxt(route1.getRouteOutput());
+		if (args[0].contains(".txt")) writeOutputTxt(route1.getRouteOutput(), args[0].replace(".txt", ""));
+		
+		else writeOutputTxt(route1.getRouteOutput(), args[0]);
 		
 		System.out.println("End: "+System.currentTimeMillis());
 		

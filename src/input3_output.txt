@@ -1,0 +1,7 @@
+137_AF from DKR to CDG Stops 0
+137_AF from CDG to LAX Stops 0
+
+Total flights: 2
+Total additional stops: 0
+Total distance: 13328.468km
+Optimality criteria: flights

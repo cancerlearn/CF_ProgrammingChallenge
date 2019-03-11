@@ -105,13 +105,15 @@ public class Routes {
 				//If the airline is active
 				if (sourceAirportIDInFIle.equals(sourceID) && a1.getAirlineActive(airlineID)) {
 					
+					String airlineIATA = routeLine.split(",")[0]; //Field storing the IATA of airlines
+					
 					String sourceIATA = routeLine.split(",")[2];     //Field storing the source airport IATAs
 					
 					String destinationIATA = routeLine.split(",")[4];     //Field storing the destination airport IATAs
 					
 					String stops = routeLine.split(",")[7];
 					
-					String routeToDestination = "AirlineID: " + airlineID + ", from SourceAirportIATA: " + sourceIATA + "_" + sourceAirportIDInFIle + 
+					String routeToDestination = "AirlineID: " + airlineID + "_" + airlineIATA + ", from SourceAirportIATA: " + sourceIATA + "_" + sourceAirportIDInFIle + 
 							", DestinationAirportIATA: " + destinationIATA + "_" + destinationAirportID + 
 							", Stops: " + stops;
 					

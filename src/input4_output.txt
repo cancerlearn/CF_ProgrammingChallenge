@@ -1,0 +1,7 @@
+130_SU from AER to IST Stops 0
+4951_TK from IST to ACC Stops 0
+
+Total flights: 2
+Total additional stops: 0
+Total distance: 5831.403km
+Optimality criteria: flights
