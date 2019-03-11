@@ -9,9 +9,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.ArrayList;
-import java.util.Stack;
 import java.io.FileNotFoundException;
 
 /**
@@ -33,14 +31,14 @@ public class FlightFinder {
 	 * 
 	 * @return array containing starting and ending "city, country"
 	 */
-	private static String[] getInputTxt() {
+	private static String[] getInputTxt(String file) {
 		
 		BufferedReader bRead = null;
 		String[] input = new String[2];
 		
 		try {
 			
-			bRead = new BufferedReader(new FileReader("destinationfrom-X-to-Y.txt"));
+			bRead = new BufferedReader(new FileReader(file));
 			input[0] = bRead.readLine();
 			if (input[0] == null) System.out.println("Input file empty.");
 			input[1] = bRead.readLine();
@@ -156,10 +154,8 @@ public class FlightFinder {
 	 */
 	private static String findIndirectRoute(ArrayList<String> possibleDestinations, String parentDestination, ArrayList<String> path, int level) {
 		
-		
-		
-		//Routes parentRoute = new Routes(FlightFinder.airlines, parentDestination, desiredDestination, path);
 		Routes r1 = null;
+		
 		String intermediaryDestination = null;
 		
 
@@ -242,7 +238,7 @@ public class FlightFinder {
 		System.out.println("Start: "+System.currentTimeMillis());
 
 		//Store starting point and destination
-		String[] inputTxt = getInputTxt();
+		String[] inputTxt = getInputTxt(args[0]);
 
 		//These two fields store the city and country of source
 		String sourceCity = inputTxt[0].split(", ")[0];
